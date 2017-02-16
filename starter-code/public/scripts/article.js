@@ -47,14 +47,14 @@ Article.prototype.toHtml = function() {
  * - Inputs: identify any inputs and their source
  * - Outputs: identify any outputs and their destination
  */
-Article.loadAll = function(rows) {
+Article.loadAll = function(rows) {//rows are records. In this case, blog articles. Article.loadAll loads the array of articles//
   // TODO: describe what the following code is doing
-  rows.sort(function(a,b) {
+  rows.sort(function(a,b) {//Callback being passed into function, which is called when rows.sort is executed. Sorting the records by date.//
     return (new Date(b.publishedOn)) - (new Date(a.publishedOn));
   });
 
   // TODO: describe what the following code is doing
-  rows.forEach(function(ele) {
+  rows.forEach(function(ele) {//ele refers to elements in an array. Here, it's a placeholder.//
     Article.all.push(new Article(ele));
   })
 };
@@ -68,7 +68,7 @@ Article.loadAll = function(rows) {
  * - Inputs: identify any inputs and their source
  * - Outputs: identify any outputs and their destination
  */
-Article.fetchAll = function(callback) {
+Article.fetchAll = function(callback) {//if there are records in the database, do one thing. Else...//
   // TODO: describe what the following code is doing
   $.get('/articles')
   // TODO: describe what the following code is doing
@@ -109,17 +109,17 @@ Article.fetchAll = function(callback) {
  * - Inputs: identify any inputs and their source
  * - Outputs: identify any outputs and their destination
  */
-Article.truncateTable = function(callback) {
+Article.truncateTable = function(callback) {//deletes all data in table if callback(callback)//
   // TODO: describe what the following code is doing
-  $.ajax({
-    url: '/articles',
-    method: 'DELETE',
+  $.ajax({//goes to our controller, which is server js, via ajax. When that requests is made by that method, it gets to server js and//
+    url: '/articles', //ajax request to url of articles
+    method: 'DELETE', //with the method of delete--a REST http delete method, which is being handled by the server.
   })
   // TODO: describe what the following code is doing
   .then(function(data) {
     console.log(data);
     if (callback) callback();
-  });
+  });//
 };
 
 // ++++++++++++++++++++++++++++++++++++++
