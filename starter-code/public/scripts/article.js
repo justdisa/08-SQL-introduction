@@ -40,21 +40,18 @@ Article.prototype.toHtml = function() {
 
 // ++++++++++++++++++++++++++++++++++++++
 
-// TODO
+// DONE
 /**
- * OVERVIEW of
- * - Describe what the method does
- * - Inputs: identify any inputs and their source
- * - Outputs: identify any outputs and their destination
- */
-Article.loadAll = function(rows) {//rows are records. In this case, blog articles. Article.loadAll loads the array of articles//
-  // TODO: describe what the following code is doing
-  rows.sort(function(a,b) {//Callback being passed into function, which is called when rows.sort is executed. Sorting the records by date.//
+ * OVERVIEW: This loads all our blog articles sorted in order of their publication date and pushes them to the article element on index.html. Each article object is a row. They come from our data JSON file and go to index.html.
+
+Article.loadAll = function(rows) {//Rows are records. In this case, blog articles. Article.loadAll loads the array of articles//
+  // DONE: describe what the following code is doing
+  rows.sort(function(a,b) {//A callback is being passed into the function, which is called when rows.sort is executed. We're sorting the records by date.//
     return (new Date(b.publishedOn)) - (new Date(a.publishedOn));
   });
 
-  // TODO: describe what the following code is doing
-  rows.forEach(function(ele) {//ele refers to elements in an array. Here, it's a placeholder.//
+  // DONE: describe what the following code is doing
+  rows.forEach(function(ele) {//ele refers to elements in an array. Here, it's a placeholder. This is cycling through the articles in our article array and pushing each one to the article element in index html.//
     Article.all.push(new Article(ele));
   })
 };
@@ -63,28 +60,26 @@ Article.loadAll = function(rows) {//rows are records. In this case, blog article
 
 // TODO
 /**
- * OVERVIEW of
- * - Describe what the method does
- * - Inputs: identify any inputs and their source
- * - Outputs: identify any outputs and their destination
+ * OVERVIEW
+    Check for records in the database. If there are no records in the database, get them from the JSON file and add them to the database.
  */
 Article.fetchAll = function(callback) {//if there are records in the database, do one thing. Else...//
-  // TODO: describe what the following code is doing
-  $.get('/articles')
-  // TODO: describe what the following code is doing
+  // DONE: describe what the following code is doing
+  $.get('/articles') //Look for records in the database
+  // DONE: describe what the following code is doing
   .then(
     function(results) {
-      if (results.length) { // If records exist in the DB
-        // TODO: describe what the following code is doing
-        Article.loadAll(results);
+      if (results.length) { // If records exist in the database
+        // DONE: describe what the following code is doing
+        Article.loadAll(results); //load the database records
         callback();
-      } else { // if NO records exist in the DB
-        // TODO: describe what the following code is doing
-        $.getJSON('./data/hackerIpsum.json')
+      } else { // if NO records exist in the database
+        // DONE: describe what the following code is doing
+        $.getJSON('./data/hackerIpsum.json') //grab our JSON file
         .then(function(rawData) {
-          rawData.forEach(function(item) {
+          rawData.forEach(function(item) {//cycle through all the records in the JSON
             let article = new Article(item);
-            article.insertRecord(); // Add each record to the DB
+            article.insertRecord(); // and add each record to the DB
           })
         })
         // TODO: describe what the following code is doing
@@ -102,23 +97,21 @@ Article.fetchAll = function(callback) {//if there are records in the database, d
 
 // ++++++++++++++++++++++++++++++++++++++
 
-// TODO
+// DONE
 /**
- * OVERVIEW of
- * - Describe what the method does
- * - Inputs: identify any inputs and their source
- * - Outputs: identify any outputs and their destination
+ * OVERVIEW
+    Deletes the data in the table, leaving the schema in place.
  */
 Article.truncateTable = function(callback) {//deletes all data in table if callback(callback)//
-  // TODO: describe what the following code is doing
-  $.ajax({//goes to our controller, which is server js, via ajax. When that requests is made by that method, it gets to server js and//
+  // DONE: describe what the following code is doing
+  $.ajax({//goes to our controller, which is server js, via ajax. When the request is made by that method, it gets to server js and//
     url: '/articles', //ajax request to url of articles
     method: 'DELETE', //with the method of delete--a REST http delete method, which is being handled by the server.
   })
-  // TODO: describe what the following code is doing
+  // DONE: describe what the following code is doing
   .then(function(data) {
-    console.log(data);
-    if (callback) callback();
+    console.log(data); //logs data to the console.
+    if (callback) callback(); //I'm still fuzzy on this//
   });//
 };
 
@@ -126,40 +119,37 @@ Article.truncateTable = function(callback) {//deletes all data in table if callb
 
 // TODO
 /**
- * OVERVIEW of
- * - Describe what the method does
- * - Inputs: identify any inputs and their source
- * - Outputs: identify any outputs and their destination
+ * OVERVIEW
+  This is the method by which we insert new (local) articles into the database.
  */
 Article.prototype.insertRecord = function(callback) {
-  // TODO: describe what the following code is doing
+  // DONE: describe what the following code is doing
+  //inserting new articles into the database
   $.post('/articles', {author: this.author, authorUrl: this.authorUrl, body: this.body, category: this.category, publishedOn: this.publishedOn, title: this.title})
-  // TODO: describe what the following code is doing
+  // DONE: describe what the following code is doing
   .then(function(data) {
-    console.log(data);
-    if (callback) callback();
+    console.log(data); //console logging data, again.
+    if (callback) callback(); //still fuzzy here.
   })
 };
 
 // ++++++++++++++++++++++++++++++++++++++
 
-// TODO
+// DONE
 /**
- * OVERVIEW of
- * - Describe what the method does
- * - Inputs: identify any inputs and their source
- * - Outputs: identify any outputs and their destination
+ * OVERVIEW
+  This is the method by which we delete records from the database
  */
 Article.prototype.deleteRecord = function(callback) {
   // TODO: describe what the following code is doing
-  $.ajax({
-    url: `/articles/${this.article_id}`,
-    method: 'DELETE'
+  $.ajax({ //ajax talks to our controller to get it to delete
+    url: `/articles/${this.article_id}`,//here's where the articles are
+    method: 'DELETE' //here's what we're doing to them.
   })
-  // TODO: describe what the following code is doing
+  // DONE: describe what the following code is doing
   .then(function(data) {
     console.log(data);
-    if (callback) callback();
+    if (callback) callback(); //callbacks are still fuzzy
   });
 };
 
@@ -168,15 +158,13 @@ Article.prototype.deleteRecord = function(callback) {
 // TODO
 /**
  * OVERVIEW of
- * - Describe what the method does
- * - Inputs: identify any inputs and their source
- * - Outputs: identify any outputs and their destination
+ * - This is the method by which we update records in our database.
  */
 Article.prototype.updateRecord = function(callback) {
   // TODO: describe what the following code is doing
-  $.ajax({
-    url: `/articles/${this.article_id}`,
-    method: 'PUT',
+  $.ajax({ //ajax communicates with the controller
+    url: `/articles/${this.article_id}`,//at this Url
+    method: 'PUT',//
     data: {  // TODO: describe what this object is doing
       author: this.author,
       authorUrl: this.authorUrl,
@@ -186,9 +174,9 @@ Article.prototype.updateRecord = function(callback) {
       title: this.title
     }
   })
-  // TODO: describe what the following code is doing
+  // DONE: describe what the following code is doing
   .then(function(data) {
     console.log(data);
-    if (callback) callback();
+    if (callback) callback();//fuzzy
   });
 };
